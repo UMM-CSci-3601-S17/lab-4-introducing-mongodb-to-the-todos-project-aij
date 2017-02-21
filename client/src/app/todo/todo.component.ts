@@ -16,7 +16,7 @@ export class TodoComponent implements OnInit {
 
     private subscribeToServiceForId() {
         if (this._id) {
-            this.todoListService.getUserById(this._id).subscribe(
+            this.todoListService.getTodoById(this._id).subscribe(
                 todo => this.todo = todo,
                 err => {
                     console.log(err);
