@@ -47,6 +47,21 @@ public class TodoController {
             filterDoc = filterDoc.append("owner", targetOwner);
         }
 
+        if (queryParams.containsKey("status")) {
+            String targetStatus = queryParams.get("status")[0];
+            filterDoc = filterDoc.append("status", targetStatus);
+        }
+
+        if (queryParams.containsKey("body")) {
+            String targetBody = queryParams.get("body")[0];
+            filterDoc = filterDoc.append("body", targetBody);
+        }
+
+        if (queryParams.containsKey("category")) {
+            String targetCategory = queryParams.get("category")[0];
+            filterDoc = filterDoc.append("category", targetCategory);
+        }
+
         FindIterable<Document> matchingTodos = todoCollection.find(filterDoc);
 
         return JSON.serialize(matchingTodos);
