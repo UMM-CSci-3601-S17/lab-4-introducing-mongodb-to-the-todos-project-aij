@@ -48,22 +48,9 @@ public class TodoController {
         }
 
         if (queryParams.containsKey("status")) {
-            String targetStatus = queryParams.get("status")[0];
-
-            switch (targetStatus) {
-                case "0":
-                    filterDoc = filterDoc.append("status", false);
-                    break;
-                case "1":
-                    filterDoc = filterDoc.append("status", true);
-                    break;
-            }
+            boolean targetStatus = Boolean.parseBoolean(queryParams.get("status")[0]);
+            filterDoc = filterDoc.append("status", targetStatus);
         }
-/**
-        if (queryParams.containsKey("body")) {
-            String targetBody = queryParams.get("body")[0];
-            filterDoc = filterDoc.append("body", targetBody);
-        }**/
 
         if (queryParams.containsKey("category")) {
             String targetCategory = queryParams.get("category")[0];
