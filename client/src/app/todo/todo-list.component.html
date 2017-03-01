@@ -8,12 +8,21 @@
         <th>
             <select class="TF" (input)="searchStatus = $event.target.value">
                 <option value=""></option>
-                <option value="1">true</option>
-                <option value="0">false</option>
+                <option value="1">True</option>
+                <option value="0">False</option>
             </select>
         </th>
 
     </li>
+
+    <br>
+    <p>
+        <a href="todos" class="btn btn-info btn-lg">
+            <span class="glyphicon glyphicon-refresh"></span> Refresh
+        </a>
+    </p>
+    <br>
+
     <li class="list-group-item list-group-item-info">Todos</li>
     <li *ngFor="let todo of todos | filterBy: {_id: searchID} | filterBy: {owner: searchOwner} | filterBy: { status: searchStatus } | filterBy: {body: searchBody} | filterBy: {category: searchCategory} " class="list-group-item">
         {{ todo._id }} <br>
