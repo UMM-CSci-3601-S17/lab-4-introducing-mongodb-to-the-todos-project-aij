@@ -1,19 +1,16 @@
 package umm3601.todo;
 
 import com.mongodb.MongoClient;
-import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Accumulators;
-import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Sorts;
-import com.mongodb.util.JSON;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.bson.conversions.Bson;
 
+import com.mongodb.util.JSON;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -41,50 +38,54 @@ public class TodoController {
     // List todos
     public String listTodos(Map<String, String[]> queryParams) {
         Document filterDoc = new Document();
+        FindIterable<Document> matchingTodos = todoCollection.find(filterDoc);
+
+        if (queryParams.containsKey("orderBy")) {
+            String order = queryParams.get("orderBy")[0];
+            matchingTodos.sort(Sorts.ascending(order));
+        }
 
         if (queryParams.containsKey("owner")) {
             String targetOwner = queryParams.get("owner")[0];
             filterDoc = filterDoc.append("owner", targetOwner);
         }
 
+        if (queryParams.containsKey("contains")) {
+            String targetBody = queryParams.get("contains")[0];
+            filterDoc = filterDoc.append("contains", targetBody);
+        }
+
         if (queryParams.containsKey("status")) {
             String targetStatus = queryParams.get("status")[0];
 
             switch (targetStatus) {
-                case "0":
+                case "false":
                     filterDoc = filterDoc.append("status", false);
                     break;
-                case "1":
+                case "true":
                     filterDoc = filterDoc.append("status", true);
                     break;
             }
         }
-/**
-        if (queryParams.containsKey("body")) {
-            String targetBody = queryParams.get("body")[0];
-            filterDoc = filterDoc.append("body", targetBody);
-        }**/
-
-        if (queryParams.containsKey("category")) {
-            String targetCategory = queryParams.get("category")[0];
-            filterDoc = filterDoc.append("category", targetCategory);
-        }
-
-        FindIterable<Document> matchingTodos = todoCollection.find(filterDoc);
-
         return JSON.serialize(matchingTodos);
     }
 
-    // Get a single to-do
+        // Get a single to-do
+
     public String getTodo(String id) {
         FindIterable<Document> jsonTodos
                 = todoCollection
                 .find(eq("_id", new ObjectId(id)));
-
         Iterator<Document> iterator = jsonTodos.iterator();
+        if(iterator.hasNext()) {
+            Document todo = iterator.next();
 
-        Document todo = iterator.next();
-
-        return todo.toJson();
+            return todo.toJson();
+        }
+        else
+            return null;
     }
+
+
+
 }
