@@ -8,14 +8,17 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Sorts;
+import com.mongodb.client.model.Filters;
 import com.mongodb.util.JSON;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.bson.conversions.Bson;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.*;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -40,24 +43,24 @@ public class TodoController {
 
     // List todos
     public String listTodos(Map<String, String[]> queryParams) {
-        Document filterDoc = new Document();
+        List<Bson> aggregateParams = new ArrayList<>();
 
         if (queryParams.containsKey("owner")) {
-            String targetOwner = queryParams.get("owner")[0];
-            filterDoc = filterDoc.append("owner", targetOwner);
+            String owner = queryParams.get("owner")[0];
+            aggregateParams.add(Aggregates.match(Filters.eq("owner", owner)));
         }
 
         if (queryParams.containsKey("status")) {
-            boolean targetStatus = Boolean.parseBoolean(queryParams.get("status")[0]);
-            filterDoc = filterDoc.append("status", targetStatus);
+            String status = queryParams.get("status")[0];
+            aggregateParams.add(Aggregates.match(Filters.eq("status", Boolean.parseBoolean(status))));
         }
 
-        if (queryParams.containsKey("category")) {
-            String targetCategory = queryParams.get("category")[0];
-            filterDoc = filterDoc.append("category", targetCategory);
+        if (queryParams.containsKey("body")) {
+            String body = queryParams.get("body")[0];
+            aggregateParams.add(Aggregates.match(Filters.regex("body", body)));
         }
 
-        FindIterable<Document> matchingTodos = todoCollection.find(filterDoc);
+        AggregateIterable<Document> matchingTodos = todoCollection.aggregate(aggregateParams);
 
         return JSON.serialize(matchingTodos);
     }
