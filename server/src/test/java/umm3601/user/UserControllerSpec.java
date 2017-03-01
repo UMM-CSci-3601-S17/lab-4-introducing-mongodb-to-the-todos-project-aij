@@ -19,11 +19,6 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * JUnit tests for the UserController.
- *
- * Created by mcphee on 22/2/17.
- */
 public class UserControllerSpec
 {
     private UserController userController;
