@@ -1,14 +1,19 @@
 package umm3601.todo;
 
 import com.mongodb.MongoClient;
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Accumulators;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Sorts;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.bson.conversions.Bson;
 
+import java.util.*;
 import com.mongodb.util.JSON;
 import java.io.IOException;
 import java.util.Iterator;
@@ -37,36 +42,25 @@ public class TodoController {
 
     // List todos
     public String listTodos(Map<String, String[]> queryParams) {
-        Document filterDoc = new Document();
-        FindIterable<Document> matchingTodos = todoCollection.find(filterDoc);
-
-        if (queryParams.containsKey("orderBy")) {
-            String order = queryParams.get("orderBy")[0];
-            matchingTodos.sort(Sorts.ascending(order));
-        }
+        List<Bson> aggregateParams = new ArrayList<>();
 
         if (queryParams.containsKey("owner")) {
-            String targetOwner = queryParams.get("owner")[0];
-            filterDoc = filterDoc.append("owner", targetOwner);
-        }
-
-        if (queryParams.containsKey("contains")) {
-            String targetBody = queryParams.get("contains")[0];
-            filterDoc = filterDoc.append("contains", targetBody);
+            String owner = queryParams.get("owner")[0];
+            aggregateParams.add(Aggregates.match(Filters.eq("owner", owner)));
         }
 
         if (queryParams.containsKey("status")) {
-            String targetStatus = queryParams.get("status")[0];
-
-            switch (targetStatus) {
-                case "false":
-                    filterDoc = filterDoc.append("status", false);
-                    break;
-                case "true":
-                    filterDoc = filterDoc.append("status", true);
-                    break;
-            }
+            String status = queryParams.get("status")[0];
+            aggregateParams.add(Aggregates.match(Filters.eq("status", Boolean.parseBoolean(status))));
         }
+
+        if (queryParams.containsKey("body")) {
+            String body = queryParams.get("body")[0];
+            aggregateParams.add(Aggregates.match(Filters.regex("body", body)));
+        }
+
+        AggregateIterable<Document> matchingTodos = todoCollection.aggregate(aggregateParams);
+
         return JSON.serialize(matchingTodos);
     }
 
