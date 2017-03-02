@@ -5,25 +5,25 @@
         <input #input type="text" placeholder="Filter by body" (input)="searchBody = $event.target.value">
         <input #input type="text" placeholder="Filter by category" (input)="searchCategory = $event.target.value">
 
-        <th>
             <select class="TF" (input)="searchStatus = $event.target.value">
                 <option value=""></option>
                 <option value="1">True</option>
                 <option value="0">False</option>
             </select>
-        </th>
 
     </li>
 
     <br>
     <p>
         <a href="todos" class="btn btn-info btn-lg">
-            <span class="glyphicon glyphicon-refresh"></span> Refresh
+            <span class="glyphicon glyphicon-refresh"></span> Clear
         </a>
     </p>
     <br>
 
-    <li class="list-group-item list-group-item-info">Todos</li>
+    <li class="list-group-item list-group-item-info">Todos
+        <span class="label label-info">INFORMATION</span>
+    </li>
     <li *ngFor="let todo of todos | filterBy: {_id: searchID} | filterBy: {owner: searchOwner} | filterBy: { status: searchStatus } | filterBy: {body: searchBody} | filterBy: {category: searchCategory} " class="list-group-item">
         {{ todo._id }} <br>
         {{ todo.owner }} <br>
@@ -32,3 +32,4 @@
         {{ todo.category }} <br>
     </li>
 </ul>
+
