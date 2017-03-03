@@ -28,10 +28,10 @@ public class TodoController {
 
     public TodoController() throws IOException {
         // Set up our server address
-        // (Default host: 'localhost', default port: 27017)
+        // (Default host: 'localhost', default port:com.mongodb.client.MongoCollection 27017)
         // ServerAddress testAddress = new ServerAddress();
 
-        // Try connecting to the server
+        // Try connecting to the serverwhat is AggregateIterable
         // MongoClient mongoClient = new MongoClient(testAddress, credentials);
         MongoClient mongoClient = new MongoClient(); // Defaults!
 
@@ -43,24 +43,24 @@ public class TodoController {
 
     // List todos
     public String listTodos(Map<String, String[]> queryParams) {
-        List<Bson> aggregateParams = new ArrayList<>();
+        List<Bson> bsonList = new ArrayList<>();
 
-        if (queryParams.containsKey("owner")) {
-            String owner = queryParams.get("owner")[0];
-            aggregateParams.add(Aggregates.match(Filters.eq("owner", owner)));
+        if (queryParams.containsKey("owner") && queryParams.get("owner")[0] != "") {
+            String targetOwner = queryParams.get("owner")[0];
+            bsonList.add(Aggregates.match(Filters.eq("owner", targetOwner)));
         }
 
-        if (queryParams.containsKey("status")) {
-            String status = queryParams.get("status")[0];
-            aggregateParams.add(Aggregates.match(Filters.eq("status", Boolean.parseBoolean(status))));
+        if (queryParams.containsKey("status") && queryParams.get("status")[0] != "") {
+            String targetStatus = queryParams.get("status")[0];
+            bsonList.add(Aggregates.match(Filters.eq("status", Boolean.parseBoolean(targetStatus))));
         }
 
-        if (queryParams.containsKey("body")) {
-            String body = queryParams.get("body")[0];
-            aggregateParams.add(Aggregates.match(Filters.regex("body", body)));
+        if (queryParams.containsKey("body") && queryParams.get("body")[0] != "") {
+            String targetBody = queryParams.get("body")[0];
+            bsonList.add(Aggregates.match(Filters.regex("body", targetBody)));
         }
 
-        AggregateIterable<Document> matchingTodos = todoCollection.aggregate(aggregateParams);
+        AggregateIterable<Document> matchingTodos = todoCollection.aggregate(bsonList);
 
         return JSON.serialize(matchingTodos);
     }
