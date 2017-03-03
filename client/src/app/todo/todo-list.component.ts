@@ -9,15 +9,18 @@ import { FilterBy } from "./filter.pipe";
     providers: [ FilterBy ]
 })
 
-export class TodoListComponent implements OnInit {
+export class TodoListComponent {
     public todos: Todo[];
+    public searchOwner: string;
+    public searchStatus: string;
+    public searchBody: string;
 
     constructor(private todoListService: TodoListService) {
         // this.users = this.userListService.getUsers();
     }
 
-    ngOnInit(): void {
-        this.todoListService.getTodos().subscribe(
+    enterFilterVal(): void {
+        this.todoListService.filterTodosByField(this.searchOwner, this.searchStatus, this.searchBody).subscribe(
             todos => this.todos = todos,
             err => {
                 console.log(err);

@@ -47,6 +47,7 @@ export class FilterBy implements PipeTransform {
      * @param filter
      * @returns {(value:any)=>boolean}
      */
+
     private filterDefault(filter) {
         return value => {
             return !filter || filter == value;

@@ -5,7 +5,7 @@ import { TodoListService } from "./todo-list.service";
 import { Observable } from "rxjs";
 import { PipeModule } from "../../pipe.module";
 
-describe("User list", () => {
+describe("Todo list", () => {
 
     let todoList: TodoListComponent;
     let fixture: ComponentFixture<TodoListComponent>;
@@ -15,7 +15,7 @@ describe("User list", () => {
     };
 
     beforeEach(() => {
-        // stub UserService for test purposes
+        // stub TodoService for test purposes
         todoListServiceStub = {
             getTodos: () => Observable.of([
                 {
