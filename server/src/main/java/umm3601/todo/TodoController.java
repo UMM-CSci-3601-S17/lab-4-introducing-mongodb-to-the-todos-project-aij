@@ -77,4 +77,16 @@ public class TodoController {
 
         return todo.toJson();
     }
+
+    public String getCat() {
+        AggregateIterable<Document> documents
+                = todoCollection.aggregate(
+                Arrays.asList(
+                        Aggregates.group("$owner",
+                                Accumulators.sum("TodosByOwner", 1)),
+                        Aggregates.sort(Sorts.ascending("_id"))
+                ));
+        System.err.println(JSON.serialize(documents));
+        return JSON.serialize(documents);
+    }
 }
