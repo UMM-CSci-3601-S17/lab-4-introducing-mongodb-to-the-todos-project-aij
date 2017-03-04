@@ -70,12 +70,11 @@ public class Server {
             return todoController.getTodo(id);
         });
 
-        /*
         // Get to-do summary
         get("api/todoSummary", (req, res) -> {
             res.type("application/json");
             return todoController.todoSummary();
-        });*/
+        });
 
         // Handle "404" file not found requests:
         notFound((req, res) -> {
