@@ -7,26 +7,26 @@
         <form onsubmit="return false;">
             <input type="checkbox" id="owner">
             Owner:
-            <input #input type="text" placeholder="Filter owner" (input)="searchOwner = $event.target.value">
+            <input #input type="text" id="ownerVal" placeholder="Filter owner" (input)="searchOwner = $event.target.value">
 
             <input type="checkbox" id="body">
             Body:
-            <input #input type="text" placeholder="Filter by body" (input)="searchBody = $event.target.value">
+            <input #input type="text" id="bodyVal" placeholder="Filter by body" (input)="searchBody = $event.target.value">
 
             <input type="checkbox" id="category">
             Category:
-            <input #input type="text" placeholder="Filter by category" (input)="searchCategory = $event.target.value">
+            <input #input type="text" id="categoryVal" placeholder="Filter by category" (input)="searchCategory = $event.target.value">
 
             <input type="checkbox" id="status">
             Status:
-            <select class="TF" (input)="searchStatus = $event.target.value">
+            <select class="TF" id="statusVal" (input)="searchStatus = $event.target.value">
                 <option value=""></option>
-                <option value="1">True</option>
-                <option value="0">False</option>
+                <option value=true>True</option>
+                <option value=false>False</option>
             </select>
 
             <br><br>
-            <button onclick="filterTodos()" class="btn btn-primary">
+            <button (click)="clickToFilter()" class="btn btn-primary">
                 <span class="glyphicon glyphicon-filter"></span> Filter Todos
             </button>
         </form>
