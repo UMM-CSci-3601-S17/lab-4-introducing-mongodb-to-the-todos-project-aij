@@ -26,34 +26,16 @@
             </select>
 
             <br><br>
-            <button onclick="getTodos" class="btn btn-primary">
+            <button onclick="filterTodos()" class="btn btn-primary">
                 <span class="glyphicon glyphicon-filter"></span> Filter Todos
             </button>
         </form>
     </li>
 
-    <!--
-    <br>
-    <p>
-        <a href="todos" class="btn btn-info btn-lg">
-            <span class="glyphicon glyphicon-refresh"></span> Clear
-        </a>
-    </p>
-    <br>-->
-
     <br>
     <li class="list-group-item list-group-item-info">Todos
         <span class="label label-info">INFORMATION</span>
     </li>
-    <!--
-    <li *ngFor="let todo of todos | filterBy: {_id: searchID} | filterBy: {owner: searchOwner} | filterBy: { status: searchStatus } | filterBy: {body: searchBody} | filterBy: {category: searchCategory} " class="list-group-item">
-        {{ todo._id }} <br>
-        {{ todo.owner }} <br>
-        {{ todo.status }} <br>
-        {{ todo.body }} <br>
-        {{ todo.category }} <br>
-    </li>
-    -->
 
     <li *ngFor="let todo of todos | filterBy: {_id: searchID} " class="list-group-item">
         {{ todo._id }} <br>
