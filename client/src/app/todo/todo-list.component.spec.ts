@@ -15,29 +15,29 @@ describe("Todo list", () => {
     };
 
     beforeEach(() => {
-        // stub TodoService for test purposes
+        // stub UserService for test purposes
         todoListServiceStub = {
             getTodos: () => Observable.of([
                 {
-                    _id: "58895985a22c04e761776d54",
-                    owner: "Blanche",
-                    status: false,
-                    body: "In sunt ex non tempor cillum commodo amet incididunt anim qui commodo quis. Cillum non labore ex sint esse.",
-                    category: "software design"
+                    _id: "barry_id",
+                    owner: "Barry",
+                    status: true,
+                    body: "sunny day",
+                    category: "groceries"
                 },
                 {
-                    _id: "58895985c1849992336c219b",
-                    owner: "Fry",
-                    status: false,
-                    body: "Ipsum esse est ullamco magna tempor anim laborum non officia deserunt veniam commodo. Aute minim incididunt ex commodo.",
+                    _id: "blanche_id",
+                    owner: "Blanche",
+                    status: true,
+                    body: "rainy day",
                     category: "video games"
                 },
                 {
-                    _id: "58895985ae3b752b124e7663",
+                    _id: "fry_id",
                     owner: "Fry",
-                    status: true,
-                    body: "Ullamco irure laborum magna dolor non. Anim occaecat adipisicing cillum eu magna in.",
-                    category: "homework"
+                    status: false,
+                    body: "beautiful day",
+                    category: "groceries"
                 }
             ])
         };
@@ -59,24 +59,24 @@ describe("Todo list", () => {
         });
     }));
 
-    it("contains all the users", () => {
+    it("contains all the todos", () => {
         expect(todoList.todos.length).toBe(3);
     });
 
-    it("doesn't contains a user named 'Chris'", () => {
-        expect(todoList.todos.some((todo: Todo) => todo.owner === "Chris" )).toBe(false);
+    it("contains an owner named 'Barry'", () => {
+        expect(todoList.todos.some((todo: Todo) => todo.owner === "Barry" )).toBe(true);
     });
 
-    it("contain a user named 'Blanche'", () => {
+    it("contains an owner named 'Blanche'", () => {
         expect(todoList.todos.some((todo: Todo) => todo.owner === "Blanche" )).toBe(true);
     });
 
-    it("contain a user named 'Fry'", () => {
-        expect(todoList.todos.some((todo: Todo) => todo.owner === "Fry" )).toBe(true);
+    it("doesn't contain an owner named 'Santa'", () => {
+        expect(todoList.todos.some((todo: Todo) => todo.owner === "Santa" )).toBe(false);
     });
 
-    it("has two statuses that are false", () => {
-        expect(todoList.todos.filter((todo: Todo) => todo.status === false).length).toBe(2);
+    it("has two todos whose status 'true'", () => {
+        expect(todoList.todos.filter((todo: Todo) => todo.status === true).length).toBe(2);
     });
 
 });
