@@ -45,19 +45,24 @@ public class TodoController {
     public String listTodos(Map<String, String[]> queryParams) {
         List<Bson> bsonList = new ArrayList<>();
 
-        if (queryParams.containsKey("owner") && queryParams.get("owner")[0] != "") {
+        if (queryParams.containsKey("owner")) {
             String targetOwner = queryParams.get("owner")[0];
             bsonList.add(Aggregates.match(Filters.eq("owner", targetOwner)));
         }
 
-        if (queryParams.containsKey("status") && queryParams.get("status")[0] != "") {
-            String targetStatus = queryParams.get("status")[0];
-            bsonList.add(Aggregates.match(Filters.eq("status", Boolean.parseBoolean(targetStatus))));
-        }
-
-        if (queryParams.containsKey("body") && queryParams.get("body")[0] != "") {
+        if (queryParams.containsKey("body")) {
             String targetBody = queryParams.get("body")[0];
             bsonList.add(Aggregates.match(Filters.regex("body", targetBody)));
+        }
+
+        if (queryParams.containsKey("category")) {
+            String targetCategory = queryParams.get("category")[0];
+            bsonList.add(Aggregates.match(Filters.eq("category", targetCategory)));
+        }
+
+        if (queryParams.containsKey("status")) {
+            String targetStatus = queryParams.get("status")[0];
+            bsonList.add(Aggregates.match(Filters.eq("status", Boolean.parseBoolean(targetStatus))));
         }
 
         AggregateIterable<Document> matchingTodos = todoCollection.aggregate(bsonList);
@@ -78,6 +83,7 @@ public class TodoController {
         return todo.toJson();
     }
 
+    /*
     public String getCat() {
         AggregateIterable<Document> documents
                 = todoCollection.aggregate(
@@ -88,5 +94,5 @@ public class TodoController {
                 ));
         System.err.println(JSON.serialize(documents));
         return JSON.serialize(documents);
-    }
+    }*/
 }
