@@ -91,43 +91,6 @@ public class TodoController {
         }
     };
 
-    /*
-    public String todoSummary() {
-        AggregateIterable<Document> documents
-                = todoCollection.aggregate(
-                Arrays.asList(
-                        Aggregates.group("$owner",
-                                Accumulators.sum("TodosByOwner", 1)),
-                        Aggregates.sort(Sorts.ascending("_id"))
-                ));
-        System.err.println(JSON.serialize(documents));
-        return JSON.serialize(documents);
-    }
-
-    public String todoSummary() {
-        AggregateIterable<Document> documents
-                = todoCollection.aggregate(
-                Arrays.asList(
-                        Aggregates.group("$status",
-                                Accumulators.sum("TodosByStatus", 1))
-                ));
-        System.err.println(JSON.serialize(documents));
-        return JSON.serialize(documents);
-    }*/
-
-    public float getPercentTodosComplete() {
-        float percentTodosComplete;
-        float numOfAllTodos;
-        float numOfCompleteTodos;
-
-        numOfAllTodos = (float)todoCollection.count();
-        numOfCompleteTodos = (float)todoCollection.count(Filters.eq("status", true));
-
-        percentTodosComplete = numOfCompleteTodos / numOfAllTodos;
-
-        return percentTodosComplete;
-    }
-
     public float getNumbers(String field, String targetVal) {
         Document document = new Document();
         document.append("status", true);
@@ -138,8 +101,8 @@ public class TodoController {
     public String todoSummary() {
         String summary ="";
 
-        //float numOfAllTodos = (float)todoCollection.count();
-        //float numOfCompleteTodos = (float)todoCollection.count(Filters.eq("status", true));
+        float numOfAllTodos = (float)todoCollection.count();
+        float numOfCompleteTodos = (float)todoCollection.count(Filters.eq("status", true));
 
         float completeBarry = getNumbers("owner", "Barry");
         float completeBlanche = getNumbers("owner", "Blanche");
@@ -147,36 +110,25 @@ public class TodoController {
         float completeFry = getNumbers("owner", "Fry");
         float completeRoberta = getNumbers("owner", "Roberta");
         float completeWorkman = getNumbers("owner", "Workman");
-        System.out.println("1: " + completeBarry);
-        System.out.println("2: " + completeBlanche);
-        System.out.println("3: " + completeDawn);
-        System.out.println("4: " + completeFry);
-        System.out.println("5: " + completeRoberta);
-        System.out.println("6: " + completeWorkman);
 
-        float completeGroceries = getNumbers("owner", "Barry");
-        float completeHomework = getNumbers("owner", "Blanche");
-        float completeSoftwareD = getNumbers("owner", "Dawn");
-        float completeVideoGames = getNumbers("owner", "Fry");
-        System.out.println("7: " + completeGroceries);
-        System.out.println("8: " + completeHomework);
-        System.out.println("9: " + completeSoftwareD);
-        System.out.println("10: " + completeVideoGames);
-
+        float completeGroceries = getNumbers("category", "groceries");
+        float completeHomework = getNumbers("category", "homework");
+        float completeSoftwareD = getNumbers("category", "software design");
+        float completeVideoGames = getNumbers("category", "video games");
         summary +=
-                "Percent-Todos-Complete: " + getPercentTodosComplete() + "\n" + "\n"
+                "Percent-Todos-Complete: " + (numOfCompleteTodos / numOfAllTodos) + "\n" + "\n"
                 + "  Categories-Percent-Complete:\n"
-                + "    Groceries: " + "\n"
-                + "    Homework: " + "\n"
-                + "    Software Design: " + "\n"
-                + "    Video Games: " + "\n" + "\n"
+                + "    Groceries: " + (completeGroceries / numOfCompleteTodos) + "\n"
+                + "    Homework: " + (completeHomework / numOfCompleteTodos) + "\n"
+                + "    Software Design: " + (completeSoftwareD / numOfCompleteTodos) + "\n"
+                + "    Video Games: " + (completeVideoGames / numOfCompleteTodos) + "\n" + "\n"
                 + "  Owners-Percent-Complete:\n"
-                + "    Barry: " + "\n"
-                + "    Blanche: " + "\n"
-                + "    Dawn: " + "\n"
-                + "    Fry: " + "\n"
-                + "    Roberta: " + "\n"
-                + "    Workman: " + "\n";
+                + "    Barry: " + (completeBarry / numOfCompleteTodos) + "\n"
+                + "    Blanche: " + (completeBlanche / numOfCompleteTodos) + "\n"
+                + "    Dawn: " + (completeDawn / numOfCompleteTodos) + "\n"
+                + "    Fry: " + (completeFry / numOfCompleteTodos) + "\n"
+                + "    Roberta: " + (completeRoberta / numOfCompleteTodos) + "\n"
+                + "    Workman: " + (completeWorkman / numOfCompleteTodos) + "\n";
 
         return summary;
     }
