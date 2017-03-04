@@ -8,13 +8,8 @@ export class TodoListService {
     private todoUrl: string = API_URL + "todos";
     constructor(private http:Http) { }
 
-
-    filterTodosByField(owner: string, status: string, body: string): Observable<Todo[]> {
-        return this.http.request(this.todoUrl
-            + "?"
-            + "owner=" + owner
-            + "&status" + status
-            + "&body" + body).map(res => res.json());
+    getTodos(filteringValues: string): Observable<Todo[]> {
+        return this.http.request(this.todoUrl + filteringValues).map(res => res.json());
     }
 
     getTodoById(id: string): Observable<Todo> {
