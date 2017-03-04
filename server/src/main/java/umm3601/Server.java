@@ -70,11 +70,12 @@ public class Server {
             return todoController.getTodo(id);
         });
 
-        // Get average ages by company
-        get("api/getCat", (req, res) -> {
+        /*
+        // Get to-do summary
+        get("api/todoSummary", (req, res) -> {
             res.type("application/json");
-            return todoController.getCat();
-        });
+            return todoController.todoSummary();
+        });*/
 
         // Handle "404" file not found requests:
         notFound((req, res) -> {
