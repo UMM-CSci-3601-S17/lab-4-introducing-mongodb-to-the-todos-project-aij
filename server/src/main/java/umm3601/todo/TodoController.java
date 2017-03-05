@@ -1,6 +1,5 @@
 package umm3601.todo;
 
-import com.mongodb.Block;
 import com.mongodb.MongoClient;
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
@@ -83,13 +82,6 @@ public class TodoController {
 
         return todo.toJson();
     }
-
-    Block<Document> printBlock = new Block<Document>() {
-        @Override
-        public void apply(final Document document) {
-            System.out.println(document.toJson());
-        }
-    };
 
     public float getNumbers(String field, String targetVal) {
         Document document = new Document();
